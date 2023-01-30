@@ -1,9 +1,10 @@
+import { Button } from '@chakra-ui/react';
 import React from 'react';
-import logo from './logo.svg';
 
 function App() {
   return (
     <div>
+      <Button color={'red.500'} >Hello, Chakra</Button>
     </div>
   );
 }
