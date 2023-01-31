@@ -4,8 +4,11 @@ import {
     Button,
     HStack,
     IconButton,
+    LightMode,
+    useColorMode,
+    useColorModeValue,
 } from "@chakra-ui/react";
-import { FaAirbnb, FaMoon } from 'react-icons/fa'
+import { FaAirbnb, FaMoon, FaSun } from 'react-icons/fa'
 import SignInModal from "./SignInModal";
 import SignUpModal from "./SignUpModal";
 
@@ -21,18 +24,24 @@ export default function Header() {
         onOpen: onSignUpOpen,
         onClose: onSignUpClose } = useDisclosure();
 
+    const { toggleColorMode } = useColorMode();
+    const logoColorMode = useColorModeValue("red.500", "red.200");
+    const iconColorMode = useColorModeValue(<FaMoon />, <FaSun />);
     return (
         <HStack paddingY={"5"} paddingX={"5"}
             borderBottomWidth={1}
             justifyContent={"space-between"}>
-            <Box color={"red.500"}>
+            <Box color={logoColorMode}>
                 <FaAirbnb size={"2rem"} />
             </Box>
             <HStack spacing={"2"}>
                 <IconButton aria-label="Toggle dark mode"
-                    icon={<FaMoon />}></IconButton>
+                    onClick={toggleColorMode}
+                    icon={iconColorMode}></IconButton>
                 <Button onClick={onSignInOpen}>Sign in</Button>
-                <Button onClick={onSignUpOpen} colorScheme={"red"}>Sign up</Button>
+                <LightMode>
+                    <Button onClick={onSignUpOpen} colorScheme={"red"}>Sign up</Button>
+                </LightMode>
             </HStack>
             <SignInModal isOpen={isSignInOpen} onClose={onSignInClose} />
             <SignUpModal isOpen={isSignUpOpen} onClose={onSignUpClose} />
