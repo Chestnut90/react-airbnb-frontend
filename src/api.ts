@@ -1,4 +1,9 @@
-const BASE_URL = "http://127.0.0.1:8000/api/v1";
+import axios from "axios";
+import { isConstructorDeclaration } from "typescript";
+
+const instance = axios.create({
+    baseURL: "http://127.0.0.1:8000/api/v1/",
+})
 
 export async function getRooms() {
 
@@ -9,7 +14,5 @@ export async function getRooms() {
     // await wait(2 * 1000);
     // console.log("end wait");
 
-    const response = await fetch(`${BASE_URL}/rooms`);
-    const json = await response.json();
-    return json;
+    return instance.get("rooms/").then((res) => res.data);
 }
