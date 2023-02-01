@@ -28,7 +28,7 @@ export default function Header() {
     const logoColorMode = useColorModeValue("red.500", "red.200");
     const iconColorMode = useColorModeValue(<FaMoon />, <FaSun />);
     return (
-        <HStack paddingY={"5"} paddingX={"5"}
+        <HStack paddingY={"10"} paddingX={"20"}
             borderBottomWidth={1}
             justifyContent={"space-between"}>
             <Box color={logoColorMode}>
