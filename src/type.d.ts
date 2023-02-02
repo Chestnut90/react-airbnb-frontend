@@ -1,8 +1,15 @@
 
 export interface IUser {
+    username: string;
     name: string;
     email: string;
-    // avatar
+    avatar: string;
+    is_host: boolean;
+    gender: string;
+    language: string;
+    currency: string;
+    date_joined: string;
+    last_login: string;
 }
 
 export interface IPhoto {
