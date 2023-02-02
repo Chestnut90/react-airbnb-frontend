@@ -33,3 +33,12 @@ export const signOut = () =>
             "X-CSRFToken": Cookie.get("csrftoken") || "",
         },
     }).then(res => res.data);
+
+export const signInWithGithub = (code: string) =>
+    instance.post("users/signin-github",
+        { code },
+        {
+            headers: {
+                "X-CSRFToken": Cookie.get("csrftoken") || "",
+            }
+        }).then(res => res.status);

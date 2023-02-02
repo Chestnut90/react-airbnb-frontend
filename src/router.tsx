@@ -3,6 +3,7 @@ import Home from './routes/Home';
 import RoomDetail from './routes/RoomDetail';
 import Root from './components/Root';
 import NotFound from './routes/NotFound';
+import GithubConfirm from './components/GithubConfirm';
 
 const router = createBrowserRouter([{
     path: '/',
@@ -17,6 +18,15 @@ const router = createBrowserRouter([{
             path: 'rooms/:roomPK',
             element: <RoomDetail />
         },
+        {
+            path: 'social',
+            children: [
+                {
+                    path: "github",
+                    element: <GithubConfirm />,
+                },
+            ]
+        }
     ]
 
 }]);

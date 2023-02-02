@@ -65,7 +65,7 @@ export default function Header() {
         <HStack paddingY={"10"} paddingX={"20"}
             borderBottomWidth={1}
             justifyContent={"space-between"}>
-            <Box color={logoColorMode}>
+            <Box color={logoColorMode} as='a' href='/'>
                 <FaAirbnb size={"2rem"} />
             </Box>
             <HStack spacing={"2"}>
