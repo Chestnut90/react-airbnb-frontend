@@ -4,7 +4,8 @@ import { IUser } from "../type";
 
 export default function useUser() {
     const { isLoading, data, isError, error } = useQuery<IUser>(["me"], getMe, {
-        retry: false
+        retry: false,
+        refetchOnWindowFocus: false,
     });
 
     return {
