@@ -12,16 +12,16 @@ import {
     MenuButton,
     MenuList,
     MenuItem,
-    Toast,
-    useQuery,
     useToast,
+    ToastId
 } from "@chakra-ui/react";
 import { FaAirbnb, FaMoon, FaSun } from 'react-icons/fa'
-import { useQueryClient } from '@tanstack/react-query';
-import { signOut } from "../api";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { signIn, signOut } from "../api";
 import useUser from "../lib/useUser";
 import SignInModal from "./SignInModal";
 import SignUpModal from "./SignUpModal";
+import { useRef } from "react";
 
 // HStack spacing => space between items, rem
 // find Default Theme for color
@@ -29,20 +29,30 @@ export default function Header() {
 
     const queryClient = useQueryClient();
     const toast = useToast();
-    const onSignOut = async () => {
-        const toastId = toast({
-            title: "Sign out...",
-            description: "Good bye and see you...",
-            status: "loading",
-            position: "bottom-right",
-        });
-        await signOut();
-        queryClient.refetchQueries(["me"]);
-        toast.update(toastId, {
-            status: "success",
-            title: "Done!",
-            description: "See you later...",
-        });
+    const toastId = useRef<ToastId>();
+    const mutation = useMutation(signOut, {
+        onMutate: () => {
+            toastId.current = toast({
+                title: "Sign out...",
+                description: "Good bye and see you...",
+                status: "loading",
+                position: "bottom-right",
+            });
+        },
+        onSuccess: () => {
+            if (toastId.current) {
+                queryClient.refetchQueries(["me"]);
+                toast.update(toastId.current, {
+                    status: "success",
+                    title: "Done!",
+                    description: "See you later...",
+                });
+            }
+        }
+    });
+
+    const onSignOut = () => {
+        mutation.mutate();
     }
 
     const { isLoading, user, isSignedIn } = useUser();

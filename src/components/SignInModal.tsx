@@ -1,7 +1,5 @@
-import { Box, Button, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useToast, VStack } from "@chakra-ui/react";
+import { Text, Box, Button, Input, InputGroup, InputLeftElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useToast, VStack } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAnimationFrame } from "framer-motion";
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaLock, FaUserNinja } from "react-icons/fa";
 import { ISignInFailureVariables, ISignInSuccessVariables, ISignInVariables, signIn } from "../api";
@@ -18,32 +16,29 @@ interface IForm {
 }
 
 export default function SignInModal({ isOpen, onClose }: ILoginModalProps) {
-
-    const { register, handleSubmit, formState: {
+    // TODO : how to reset data when sign-in failed
+    const { register, handleSubmit, reset, formState: {
         errors
-    } } = useForm<IForm>();
+    } } = useForm<IForm>({
+        defaultValues: {
+            username: "",
+            password: "",
+        }
+    });
 
     const toast = useToast();
     const queryClient = useQueryClient();
-    const mutation = useMutation<ISignInSuccessVariables,
-        ISignInFailureVariables,
-        ISignInVariables>(signIn, {
-            onMutate: () => {
-                console.log("mutation start.");
-            },
-            onSuccess: (data) => {
-                toast({
-                    title: "Welome back!",
-                    status: "success",
-                    description: `${data.ok}`
-                });
-                onClose();
-                queryClient.refetchQueries(["me"]);
-            },
-            onError: (error) => {
-                console.log("mutation has an error.");
-            }
-        });
+    const mutation = useMutation(signIn, {
+        onSuccess: () => {
+            toast({
+                title: "Welome back!",
+                status: "success",
+            });
+            onClose();
+            queryClient.refetchQueries(["me"]);
+            reset();
+        }
+    });
 
     const onSubmit = (data: IForm) => {
         mutation.mutate(data);
@@ -87,6 +82,14 @@ export default function SignInModal({ isOpen, onClose }: ILoginModalProps) {
                                 placeholder={"Password"} />
                         </InputGroup>
                     </VStack>
+                    {
+                        mutation.isError ? (
+                            <Text color={"red.500"} textAlign={"center"}
+                                fontSize="sm">
+                                Username or Password are Wrong
+                            </Text>
+                        ) : null
+                    }
                     <Button marginTop={4}
                         isLoading={mutation.isLoading}
                         type={"submit"}
