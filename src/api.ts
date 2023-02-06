@@ -51,3 +51,25 @@ export const signInWithKakao = (code: string) =>
                 "X-CSRFToken": Cookie.get("csrftoken") || "",
             }
         }).then(res => res.status);
+
+export interface ISignInVariables {
+    username: string;
+    password: string;
+}
+
+export interface ISignInSuccessVariables {
+    ok: string;
+}
+
+export interface ISignInFailureVariables {
+    error: string;
+}
+
+export const signIn = ({ username, password }: ISignInVariables) =>
+    instance.post("users/signin",
+        { username, password },
+        {
+            headers: {
+                "X-CSRFToken": Cookie.get("csrftoken") || "",
+            }
+        }).then(res => res.data);
