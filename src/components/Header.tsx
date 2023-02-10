@@ -22,6 +22,7 @@ import useUser from "../lib/useUser";
 import SignInModal from "./SignInModal";
 import SignUpModal from "./SignUpModal";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 
 // HStack spacing => space between items, rem
 // find Default Theme for color
@@ -92,6 +93,11 @@ export default function Header() {
                                     <Avatar size={"md"} name={user?.name} src={user?.avatar} />
                                 </MenuButton>
                                 <MenuList>
+                                    {user?.is_host ? (
+                                        <Link to="/rooms/upload">
+                                            <MenuItem>Upload room</MenuItem>
+                                        </Link>
+                                    ) : null}
                                     <MenuItem onClick={onSignOut}>Sign out</MenuItem>
                                 </MenuList>
                             </Menu>
