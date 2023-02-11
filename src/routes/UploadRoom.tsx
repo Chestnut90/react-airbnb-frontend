@@ -1,10 +1,16 @@
-import { Box, Checkbox, Container, FormControl, FormHelperText, FormLabel, Heading, Input, InputGroup, InputLeftAddon, Select, Textarea, VStack } from "@chakra-ui/react";
+import { Box, Checkbox, Container, FormControl, FormHelperText, FormLabel, Grid, Heading, Input, InputGroup, InputLeftAddon, Select, Textarea, VStack } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { FaBed, FaDollarSign, FaToilet } from "react-icons/fa";
+import { getAmenities } from "../api";
 import ProtectedPage from "../components/ProtectedPage";
 import useHostOnlyPage from "../lib/useHostOnlyPage";
+import { IAmenity } from "../type";
 
 export default function UploadRoom() {
     useHostOnlyPage();
+
+    const { data, isLoading } = useQuery<IAmenity[]>(["amenities"], getAmenities);
+
     return (
         <ProtectedPage>
             <Box paddingBottom={40} marginTop={40}
@@ -67,6 +73,16 @@ export default function UploadRoom() {
                             <FormHelperText>
                                 What kind of room are you renting?
                             </FormHelperText>
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel>Amenities</FormLabel>
+                            <Grid templateColumns={"1fr 1fr"} gap={5}>
+                                {data?.map(amenity =>
+                                    <Box key={amenity.pk}>
+                                        <Checkbox>{amenity.name}</Checkbox>
+                                        <FormHelperText>{amenity.description}</FormHelperText>
+                                    </Box>)}
+                            </Grid>
                         </FormControl>
                     </VStack>
                 </Container>

@@ -30,6 +30,7 @@ export interface IRoom {
 }
 
 export interface IAmenity {
+    pk: number;
     name: string;
     description: string;
 }

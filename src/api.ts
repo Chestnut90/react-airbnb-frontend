@@ -73,3 +73,6 @@ export const signIn = ({ username, password }: ISignInVariables) =>
                 "X-CSRFToken": Cookie.get("csrftoken") || "",
             }
         }).then(res => res.data);
+
+export const getAmenities = () =>
+    instance.get("rooms/amenities").then(res => res.data)
