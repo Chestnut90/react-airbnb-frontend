@@ -6,6 +6,7 @@ import NotFound from './routes/NotFound';
 import GithubConfirm from './components/GithubConfirm';
 import KakaoConfim from './components/KakaoConfirm';
 import UploadRoom from './routes/UploadRoom';
+import UploadPhotos from './routes/UploadPhotos';
 
 const router = createBrowserRouter([{
     path: '/',
@@ -22,7 +23,11 @@ const router = createBrowserRouter([{
         },
         {
             path: 'rooms/:roomPK',
-            element: <RoomDetail />
+            element: <RoomDetail />,
+        },
+        {
+            path: 'rooms/:roomPK/photos',
+            element: <UploadPhotos />,
         },
         {
             path: 'social',

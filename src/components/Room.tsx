@@ -1,10 +1,12 @@
-import { Box, Grid, HStack, VStack, Image, Text, Button } from "@chakra-ui/react";
-import { FaRegHeart, FaStar } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Box, Grid, HStack, VStack, Image, Text, Button, Container } from "@chakra-ui/react";
+import React from "react";
+import { FaCamera, FaRegHeart, FaStar } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import { IPhoto } from "../type";
 
 interface IRoomProp {
     pk: number;
+    isOwner: boolean;
     name: string;
     country: string;
     city: string;
@@ -14,12 +16,24 @@ interface IRoomProp {
 }
 
 export default function Room(prop: IRoomProp) {
+    const navigate = useNavigate();
+
+    const onCameraClick = (event: React.SyntheticEvent<HTMLButtonElement>) => {
+        event.preventDefault(); // do not propagate event to parent link.
+        navigate(`/rooms/${prop.pk}/photos`);
+    }
+
     return (
         <Link to={`/rooms/${prop.pk}`}>
             <VStack alignItems={"flex-start"}>
                 <Box rounded={"2xl"} overflow={"hidden"} position={"relative"}>
-                    <Button variant={"unstyled"} position={"absolute"} top={0} right={0} color={"white"}>
-                        <FaRegHeart size={"20px"} />
+                    <Button variant={"unstyled"} position={"absolute"}
+                        top={0} right={0}
+                        color={"white"}
+                        onClick={prop.isOwner ? onCameraClick : undefined}>
+                        <Container size={"20px"}>
+                            {prop.isOwner ? <FaCamera /> : <FaRegHeart />}
+                        </Container>
                     </Button>
                     <Image minHeight={"280"}
                         src={prop.photos.length == 0 ?
@@ -42,6 +56,6 @@ export default function Room(prop: IRoomProp) {
                     <Text as={"b"}>${prop.price}</Text>/ night
                 </Text>
             </VStack>
-        </Link>
+        </Link >
     );
 }

@@ -45,6 +45,7 @@ export default function Home() {
             {data?.map((v) => {
                 return <Room key={v.id}
                     pk={v.id}
+                    isOwner={v.is_owner}
                     photos={v.photos}
                     name={v.name}
                     rating={v.rating}
