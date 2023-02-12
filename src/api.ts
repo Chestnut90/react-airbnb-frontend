@@ -76,3 +76,25 @@ export const signIn = ({ username, password }: ISignInVariables) =>
 
 export const getAmenities = () =>
     instance.get("rooms/amenities").then(res => res.data)
+
+export interface IUploadRoomVariables {
+    name: string;
+    country: string;
+    city: string;
+    address: string;
+    description: string;
+    kind: string;
+    price: number;
+    rooms: number;
+    toilets: number;
+    pet_friendly: boolean;
+    amenities: number[];
+}
+
+// upload room api call
+export const uploadRoom = (variables: IUploadRoomVariables) =>
+    instance.post('rooms/', variables, {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || "",
+        }
+    }).then((res) => res.data);

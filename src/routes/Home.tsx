@@ -43,8 +43,8 @@ export default function Home() {
             paddingX={"40"}>
             {isLoading ? <RoomSkeletons /> : null}
             {data?.map((v) => {
-                return <Room key={v.pk}
-                    pk={v.pk}
+                return <Room key={v.id}
+                    pk={v.id}
                     photos={v.photos}
                     name={v.name}
                     rating={v.rating}

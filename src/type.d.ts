@@ -19,7 +19,7 @@ export interface IPhoto {
 }
 
 export interface IRoom {
-    pk: number;
+    id: number;
     name: string;
     country: string;
     city: string;
@@ -38,4 +38,5 @@ export interface IAmenity {
 export interface IRoomDetail extends IRoom {
     owner: IUser;
     amenities: IAmenity[];
+    description: string;
 }
