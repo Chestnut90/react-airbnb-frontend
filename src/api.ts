@@ -98,3 +98,72 @@ export const uploadRoom = (variables: IUploadRoomVariables) =>
             "X-CSRFToken": Cookie.get("csrftoken") || "",
         }
     }).then((res) => res.data);
+
+export interface IUploadURL {
+    id: string;
+    uploadURL: string;
+}
+
+// request upload url to server
+export const getUploadURL = () =>
+    instance.post(`medias/photos/get-url`, null, {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || "",
+        },
+    }).then<IUploadURL>(res => res.data)
+
+export interface IUploadImageVariables {
+    file: FileList;
+    uploadURL: string;
+}
+
+export const uploadImage = ({ file, uploadURL }: IUploadImageVariables) => {
+    const form = new FormData();
+    form.append("file", file[0])
+    return axios.post(uploadURL, form, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    }).then(res => res.data);
+}
+
+// TODO : how to upload using formal url
+export const uploadImage2 = () => {
+    const form = new FormData();
+    form.append("metadata", "");
+    form.append("requireSignedURLs", "");
+    form.append("url", "[\"https://example.com/path/to/logo.png\"]");
+
+    const options = {
+        method: 'POST',
+        url: 'https://api.cloudflare.com/client/v4/accounts/account_identifier/images/v1',
+        headers: {
+            'Content-Type': 'multipart/form-data; boundary=---011000010111000001101001',
+            'X-Auth-Email': ''
+        },
+        data: '[form]'
+    };
+
+    return axios.request(options)
+        .then(res => res.data)
+        .catch(error => console.log(error));
+}
+
+export interface ICreatePhotoVariables {
+    description: string;
+    url: string;
+    roomPk: string;
+}
+
+export const createPhoto = ({
+    description,
+    url,
+    roomPk,
+}: ICreatePhotoVariables) =>
+    instance.post(`rooms/${roomPk}/photos`,
+        { description, url },
+        {
+            headers: {
+                "X-CSRFToken": Cookie.get("csrftoken") || "",
+            },
+        }).then(res => res.data);
