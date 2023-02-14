@@ -5,7 +5,8 @@ import { checkBooking, getRoom, getRoomReviews } from "../api";
 import { IReview, IRoomDetail } from "../type";
 import { FaStar } from "react-icons/fa";
 import Calendar from "react-calendar"
-import "react-calendar/dist/Calendar.css"
+// import "react-calendar/dist/Calendar.css"
+import "../css/calendar.css"
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 
