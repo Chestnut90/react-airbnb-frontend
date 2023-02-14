@@ -180,12 +180,42 @@ type CheckBookingQueryKey = [string, string?, Date[]?];
 
 export const checkBooking = ({ queryKey }: QueryFunctionContext<CheckBookingQueryKey>) => {
     const [_, roomPk, dates] = queryKey;
-    console.log(roomPk, dates);
-    if (dates && dates.length == 2) {
+    // console.log(roomPk, dates);
+    if (dates && dates.length === 2) {
         // convert to local date
         const checksDates = dates.map(v => formatDate(v));
         return instance
             .get(`rooms/${roomPk}/bookings/check?check_in=${checksDates[0]}&check_out=${checksDates[1]}`)
             .then(res => res.data);
     }
+}
+
+interface ICreateBookingVariables {
+    roomPk: string;
+    guests: number;
+    check_in: Date;
+    check_out: Date;
+}
+
+export const createBooking = ({
+    roomPk,
+    guests,
+    check_in,
+    check_out }: ICreateBookingVariables) => {
+
+    return instance
+        .post(
+            `rooms/${roomPk}/bookings`,
+            {
+                guests,
+                "check_in": formatDate(check_in),
+                "check_out": formatDate(check_out),
+            },
+            {
+                headers: {
+                    "X-CSRFToken": Cookie.get("csrftoken") || "",
+                },
+            })
+        .then(res => res.data);
+
 }

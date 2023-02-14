@@ -40,7 +40,7 @@ export default function Home() {
             marginTop={"10"}
             columnGap={4}
             rowGap={8}
-            paddingX={"40"}>
+            paddingX={"10"}>
             {isLoading ? <RoomSkeletons /> : null}
             {data?.map((v) => {
                 return <Room key={v.id}

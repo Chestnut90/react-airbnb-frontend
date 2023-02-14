@@ -1,7 +1,7 @@
-import { Avatar, Box, Button, Container, Grid, GridItem, Heading, HStack, Image, Skeleton, Text, VStack } from "@chakra-ui/react";
+import { Avatar, Box, Button, Container, Grid, GridItem, Heading, HStack, Image, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Skeleton, Text, useToast, VStack } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { checkBooking, getRoom, getRoomReviews } from "../api";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { checkBooking, createBooking, getRoom, getRoomReviews } from "../api";
 import { IReview, IRoomDetail } from "../type";
 import { FaStar } from "react-icons/fa";
 import Calendar from "react-calendar"
@@ -16,6 +16,9 @@ export default function RoomDetail() {
     const { isLoading, data } = useQuery<IRoomDetail>(["room", roomPK], getRoom);
     const { isLoading: isReviewLoading, data: reviewData } = useQuery<IReview[]>(['rooms', roomPK, 'reviews'], getRoomReviews);
     const [dates, setDates] = useState<Date[]>();
+    const [guests, setGuests] = useState<number>(1);
+    const toast = useToast();
+
     const { data: checkBookingData, isLoading: isLoadingCheckBookingData } = useQuery(
         ["check", roomPK, dates],
         checkBooking,
@@ -24,6 +27,32 @@ export default function RoomDetail() {
             enabled: dates !== undefined,
         }
     );
+
+    const bookingMutation = useMutation(createBooking, {
+        onSuccess: (data: any) => {
+            toast({
+                status: "success",
+                title: "booking complete",
+                description: `${data}`
+            });
+
+            // TODO : navigate to booking confirm page
+        },
+        onError: (data: any) => {
+            // TODO : when reservation failed.
+        },
+    });
+
+    const onBooking = () => {
+        if (roomPK && dates && dates.length == 2) {
+            bookingMutation.mutate({
+                roomPk: roomPK,
+                guests: guests,
+                check_in: dates[0],
+                check_out: dates[1],
+            });
+        }
+    }
 
     return (
         <Box
@@ -127,7 +156,21 @@ export default function RoomDetail() {
                                 minDate={new Date()}
                                 maxDate={new Date(Date.now() + 60 * 60 * 24 * 7 * 4 * 6 * 1000)}
                             />
+                            <HStack marginTop={5} justifyContent={"space-between"} >
+                                <Text>Guests</Text>
+                                <NumberInput
+                                    value={guests}
+                                    min={1}
+                                    onChange={(valueString) => setGuests(parseInt(valueString))}>
+                                    <NumberInputField />
+                                    <NumberInputStepper>
+                                        <NumberIncrementStepper />
+                                        <NumberDecrementStepper />
+                                    </NumberInputStepper>
+                                </NumberInput>
+                            </HStack>
                             <Button
+                                onClick={onBooking}
                                 disabled={!checkBookingData?.ok}
                                 isLoading={isLoadingCheckBookingData && dates !== undefined}
                                 my={5}
