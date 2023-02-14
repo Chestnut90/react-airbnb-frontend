@@ -24,6 +24,13 @@ export const getRoom = ({ queryKey }: QueryFunctionContext) => {
     return instance.get(`rooms/${id}`).then(res => res.data);
 }
 
+export const getRoomReviews = ({ queryKey }: QueryFunctionContext) => {
+    const [_, roomPk] = queryKey;
+    return instance
+        .get(`rooms/${roomPk}/reviews`)
+        .then(res => res.data);
+}
+
 export const getMe = () =>
     instance.get("users/me").then(res => res.data);
 

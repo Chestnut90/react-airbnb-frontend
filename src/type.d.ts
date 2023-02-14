@@ -39,4 +39,13 @@ export interface IRoomDetail extends IRoom {
     owner: IUser;
     amenities: IAmenity[];
     description: string;
+    toilets: number;
+    rooms: number;
+}
+
+export interface IReview {
+    comment: string;
+    rating: number;
+    user: IUser;
+
 }
