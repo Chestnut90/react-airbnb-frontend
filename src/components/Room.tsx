@@ -29,7 +29,7 @@ export default function Room(prop: IRoomProp) {
                 <Box w={"100%"} rounded={"2xl"} overflow={"hidden"} position={"relative"}>
                     {prop.photos.length == 0 ?
                         <Box minH={"280px"} h={"100%"} w={"100%"} p={10} bg={"green.400"}></Box> :
-                        <Image minHeight={"280px"}
+                        <Image minHeight={"280px"} objectFit={"cover"}
                             src={prop.photos.length == 0 ? undefined : prop.photos[0].url} />}
                     <Button variant={"unstyled"} position={"absolute"}
                         top={0} right={0}
