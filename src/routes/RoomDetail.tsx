@@ -7,6 +7,7 @@ import { FaStar } from "react-icons/fa";
 import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 
 // TODO : show un-booking-able date
 export default function RoomDetail() {
@@ -32,6 +33,9 @@ export default function RoomDetail() {
                 lg: 40,
             }}
         >
+            <Helmet>
+                <title>{data ? data.name : "Loading..."}</title>
+            </Helmet>
             <Heading>{data?.name}</Heading>
             <Grid
                 mt={8}
