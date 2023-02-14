@@ -8,6 +8,7 @@ import Calendar from "react-calendar"
 import "react-calendar/dist/Calendar.css"
 import { useState } from "react";
 
+// TODO : show un-booking-able date
 export default function RoomDetail() {
     const { roomPK } = useParams();
     const { isLoading, data } = useQuery<IRoomDetail>(["room", roomPK], getRoom);
@@ -112,6 +113,7 @@ export default function RoomDetail() {
                         </Container>
                         <Box paddingTop={10}>
                             <Calendar
+                                goToRangeStartOnSelect
                                 selectRange
                                 onChange={setDates}
                                 prev2Label={null}
@@ -122,7 +124,7 @@ export default function RoomDetail() {
                             />
                             <Button
                                 disabled={!checkBookingData?.ok}
-                                isLoading={isLoadingCheckBookingData}
+                                isLoading={isLoadingCheckBookingData && dates !== undefined}
                                 my={5}
                                 width={"100%"}
                                 colorScheme={"red"}>
