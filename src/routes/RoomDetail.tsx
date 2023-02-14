@@ -1,7 +1,7 @@
-import { Avatar, Box, Container, Grid, GridItem, Heading, HStack, Image, Skeleton, Text, VStack } from "@chakra-ui/react";
+import { Avatar, Box, Button, Container, Grid, GridItem, Heading, HStack, Image, Skeleton, Text, VStack } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getRoom, getRoomReviews } from "../api";
+import { checkBooking, getRoom, getRoomReviews } from "../api";
 import { IReview, IRoomDetail } from "../type";
 import { FaStar } from "react-icons/fa";
 import Calendar from "react-calendar"
@@ -12,7 +12,15 @@ export default function RoomDetail() {
     const { roomPK } = useParams();
     const { isLoading, data } = useQuery<IRoomDetail>(["room", roomPK], getRoom);
     const { isLoading: isReviewLoading, data: reviewData } = useQuery<IReview[]>(['rooms', roomPK, 'reviews'], getRoomReviews);
-    const [dates, setDates] = useState<Date>();
+    const [dates, setDates] = useState<Date[]>();
+    const { data: checkBookingData, isLoading: isLoadingCheckBookingData } = useQuery(
+        ["check", roomPK, dates],
+        checkBooking,
+        {
+            cacheTime: 0,
+            enabled: dates !== undefined,
+        }
+    );
 
     return (
         <Box
@@ -112,6 +120,18 @@ export default function RoomDetail() {
                                 minDate={new Date()}
                                 maxDate={new Date(Date.now() + 60 * 60 * 24 * 7 * 4 * 6 * 1000)}
                             />
+                            <Button
+                                disabled={!checkBookingData?.ok}
+                                isLoading={isLoadingCheckBookingData}
+                                my={5}
+                                width={"100%"}
+                                colorScheme={"red"}>
+                                Make Booking
+                            </Button>
+                            {!isLoadingCheckBookingData
+                                && !checkBookingData?.ok ? (
+                                <Text color={"red.500"}>Sorry, Can't book on those dates.</Text>
+                            ) : null}
                         </Box>
                     </Box>
                 </Box>
