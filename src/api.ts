@@ -3,8 +3,12 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 import Cookie from "js-cookie";
 import { formatDate } from "./lib/utils";
 
+const baseURL = process.env.NODE_ENV === "development"
+    ? "http://127.0.0.1:8000/api/v1/"
+    : "https://backend.https://chestnut-clone.click/api/v1/";
+
 const instance = axios.create({
-    baseURL: "http://127.0.0.1:8000/api/v1/",
+    baseURL: baseURL,
     withCredentials: true, // manually add cookies
 })
 
